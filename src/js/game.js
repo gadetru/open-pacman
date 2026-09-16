@@ -42,6 +42,7 @@ function createGame() {
       dir: 'up',
       speed: GHOST_SPEED,
       kind: g.kind,
+      exitingPen: true,
     } ) ),
     ghostExitTimer: 0,
     ghostsReleased: 1,
@@ -163,6 +164,22 @@ function decideGhost( game, g ) {
   g.dir = best;
 }
 
+function moveGhostToDoor( game, g ) {
+  const grid = game.grid;
+  if ( g.y <= 12 && g.x >= 13 && g.x <= 14 ) {
+    g.exitingPen = false;
+    return;
+  }
+  if ( g.y > 12 ) {
+    g.dir = 'up';
+  } else if ( g.x < 13 ) {
+    g.dir = 'right';
+  } else if ( g.x > 14 ) {
+    g.dir = 'left';
+  }
+  if ( !canMove( grid, g.x, g.y, g.dir, 'ghost' ) ) return;
+}
+
 function moveGhost( game, g, index ) {
   if ( index >= game.ghostsReleased ) return;
 
@@ -172,13 +189,18 @@ function moveGhost( game, g, index ) {
   if ( aligned( g.x ) && aligned( g.y ) ) {
     g.x = Math.round( g.x );
     g.y = Math.round( g.y );
-    decideGhost( game, g );
+    if ( g.exitingPen ) {
+      moveGhostToDoor( game, g );
+    } else {
+      decideGhost( game, g );
+    }
     if ( !canMove( grid, g.x, g.y, g.dir, 'ghost' ) ) return;
   }
 
   const d = DIRS[ g.dir ];
   g.x += d.x * g.speed;
   g.y += d.y * g.speed;
+  if ( g.exitingPen && g.y <= 11 ) g.exitingPen = false;
   wrapTunnel( g, width );
 }
 
@@ -192,6 +214,7 @@ function resetPositions( game ) {
     g.x = GHOST_STARTS[ i ].x;
     g.y = GHOST_STARTS[ i ].y;
     g.dir = 'up';
+    g.exitingPen = true;
   } );
   game.ghostExitTimer = 0;
   game.ghostsReleased = 1;
