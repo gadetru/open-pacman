@@ -166,15 +166,16 @@ function decideGhost( game, g ) {
 
 function moveGhostToDoor( game, g ) {
   const grid = game.grid;
+  if ( g.y <= 12 && g.x >= 13 && g.x <= 14 ) {
+    g.exitingPen = false;
+    return;
+  }
   if ( g.y > 12 ) {
     g.dir = 'up';
   } else if ( g.x < 13 ) {
     g.dir = 'right';
   } else if ( g.x > 14 ) {
     g.dir = 'left';
-  } else {
-    g.exitingPen = false;
-    return;
   }
   if ( !canMove( grid, g.x, g.y, g.dir, 'ghost' ) ) return;
 }
