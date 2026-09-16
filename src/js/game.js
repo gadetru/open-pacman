@@ -46,6 +46,7 @@ function createGame() {
     ghostExitTimer: 0,
     ghostsReleased: 1,
     pacmanHistory: [],
+    penDist: penDistanceBFS( grid ),
   };
 }
 
@@ -107,6 +108,32 @@ function wrapTunnel( a, width ) {
     if ( a.x < 0 ) a.x += width;
     else if ( a.x >= width ) a.x -= width;
   }
+}
+
+// Mover fantasma hacia la puerta usando distancias BFS precalculadas.
+function moveGhostToDoor( game, g ) {
+  const grid = game.grid;
+  const penDist = game.penDist;
+
+  const options = Object.keys( DIRS ).filter(
+    ( dir ) => dir !== OPPOSITE[ g.dir ] && canMove( grid, g.x, g.y, dir, 'ghost' )
+  );
+  const choices = options.length ? options : [ OPPOSITE[ g.dir ] ];
+
+  let best = choices[ 0 ];
+  let bestDist = Infinity;
+  for ( const dir of choices ) {
+    const d = DIRS[ dir ];
+    const nx = Math.round( g.x ) + d.x;
+    const ny = Math.round( g.y ) + d.y;
+    const key = nx + ',' + ny;
+    const dist = penDist.has( key ) ? penDist.get( key ) : Infinity;
+    if ( dist < bestDist ) {
+      bestDist = dist;
+      best = dir;
+    }
+  }
+  g.dir = best;
 }
 
 function movePacman( game ) {
