@@ -1,6 +1,6 @@
 # SPEC 03 — Corrección del pathfinding de salida de pen
 
-> **Estado:** Borrador
+> **Estado:** aprobado
 > **Depends on:** SPEC 02
 > **Date:** 2026-09-16
 > **Objetivo:** Corregir la lógica de salida de pen para que los fantasmas usen pathfinding real hacia la puerta (row 12, cols 13-14) en lugar de depender únicamente de la distancia Manhattan a Pac-Man, permitiendo movimiento lateral cuando es necesario.
