@@ -1,6 +1,6 @@
 # SPEC 01 — 4 fantasmas con comportamientos diferenciados
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depends on:** —
 > **Date:** 2026-09-16
 > **Objetivo:** Implementar 4 fantasmas con comportamientos únicos (agresivo, punto fijo, intermitente, huidizo) que salen de la pen secuencialmente cada 1.5 segundos.
@@ -69,15 +69,15 @@ const game = {
 
 ## Acceptance criteria
 
-- [ ] Hay 4 fantasmas en el juego, cada uno con un color diferente
-- [ ] Los 4 fantasmas arrancan dentro de la pen
-- [ ] Los fantasmas salen de la pen uno por uno, cada ~1.5 segundos
-- [ ] El fantasma `'hunter'` persigue a Pac-Man directamente por el camino más corto
-- [ ] El fantasma `'ambusher'` se dirige a un punto fijo delante de Pac-Man
-- [ ] El fantasma `'shadow'` persigue con retardo (no va directo al Pac-Man actual)
-- [ ] El fantasma `'coward'` huye cuando Pac-Man está cerca y persigue cuando está lejos
-- [ ] Ningún fantasma atraviesa paredes
-- [ ] El juego no tiene errores en consola
+- [x] Hay 4 fantasmas en el juego, cada uno con un color diferente
+- [x] Los 4 fantasmas arrancan dentro de la pen
+- [x] Los fantasmas salen de la pen uno por uno, cada ~1.5 segundos
+- [x] El fantasma `'hunter'` persigue a Pac-Man directamente por el camino más corto
+- [x] El fantasma `'ambusher'` se dirige a un punto fijo delante de Pac-Man
+- [x] El fantasma `'shadow'` persigue con retardo (no va directo al Pac-Man actual)
+- [x] El fantasma `'coward'` huye cuando Pac-Man está cerca y persigue cuando está lejos
+- [x] Ningún fantasma atraviesa paredes
+- [x] El juego no tiene errores en consola
 
 ---
 

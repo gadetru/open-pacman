@@ -1,6 +1,6 @@
 # SPEC 02 — Mejora de salida de fantasmas desde la pen
 
-> **Estado:** Aprobado
+> **Estado:** Implementado
 > **Depends on:** SPEC 01
 > **Date:** 2026-09-16
 > **Objetivo:** Mejorar la mecánica de salida de los fantasmas desde la pen para que al ser liberados se muevan directamente hacia la puerta en lugar de quedar atrapados.
@@ -62,11 +62,11 @@ ghosts: GHOST_STARTS.map( ( g ) => ( {
 
 ## Acceptance criteria
 
-- [ ] Al ser liberado, cada fantasma se mueve directamente hacia la puerta
-- [ ] Ningún fantasma queda atrapado en la pen
-- [ ] Una vez fuera de la puerta, el fantasma usa `decideGhost()` normalmente
-- [ ] Al perder una vida, los fantasmas regresan a la pen con `exitingPen: true`
-- [ ] El juego no tiene errores en consola
+- [x] Al ser liberado, cada fantasma se mueve directamente hacia la puerta
+- [x] Ningún fantasma queda atrapado en la pen
+- [x] Una vez fuera de la puerta, el fantasma usa `decideGhost()` normalmente
+- [x] Al perder una vida, los fantasmas regresan a la pen con `exitingPen: true`
+- [x] El juego no tiene errores en consola
 
 ---
 
