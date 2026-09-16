@@ -217,22 +217,6 @@ function decideGhost( game, g ) {
   g.dir = best;
 }
 
-function moveGhostToDoor( game, g ) {
-  const grid = game.grid;
-  if ( g.y <= 12 && g.x >= 13 && g.x <= 14 ) {
-    g.exitingPen = false;
-    return;
-  }
-  if ( g.y > 12 ) {
-    g.dir = 'up';
-  } else if ( g.x < 13 ) {
-    g.dir = 'right';
-  } else if ( g.x > 14 ) {
-    g.dir = 'left';
-  }
-  if ( !canMove( grid, g.x, g.y, g.dir, 'ghost' ) ) return;
-}
-
 function moveGhost( game, g, index ) {
   if ( index >= game.ghostsReleased ) return;
 
@@ -253,7 +237,6 @@ function moveGhost( game, g, index ) {
   const d = DIRS[ g.dir ];
   g.x += d.x * g.speed;
   g.y += d.y * g.speed;
-  if ( g.exitingPen && g.y <= 11 ) g.exitingPen = false;
   wrapTunnel( g, width );
 
   if ( g.exitingPen && Math.round( g.y ) < 12 ) {
