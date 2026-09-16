@@ -1,6 +1,6 @@
 # SPEC 03 — Corrección del pathfinding de salida de pen
 
-> **Estado:** aprobado
+> **Estado:** implementado
 > **Depends on:** SPEC 02
 > **Date:** 2026-09-16
 > **Objetivo:** Corregir la lógica de salida de pen para que los fantasmas usen pathfinding real hacia la puerta (row 12, cols 13-14) en lugar de depender únicamente de la distancia Manhattan a Pac-Man, permitiendo movimiento lateral cuando es necesario.
@@ -72,13 +72,13 @@ ghosts: GHOST_STARTS.map( ( g ) => ( {
 
 ## Acceptance criteria
 
-- [ ] Al ser liberado, cada fantasma navega celda por celda hacia la puerta usando pathfinding BFS
-- [ ] Cuando la dirección hacia la puerta está bloqueada por una pared, el fantasma se mueve lateralmente para绕过 el obstáculo
-- [ ] Ningún fantasma queda atrapado en la pen
-- [ ] Una vez fuera de la puerta (y < 12), el fantasma usa `decideGhost()` normalmente
-- [ ] Al perder una vida, los fantasmas regresan a la pen con `exitingPen: true`
-- [ ] El BFS cubre todas las celdas transitables de la pen (rows 13-15, cols 12-15)
-- [ ] El juego no tiene errores en consola
+- [x] Al ser liberado, cada fantasma navega celda por celda hacia la puerta usando pathfinding BFS
+- [x] Cuando la dirección hacia la puerta está bloqueada por una pared, el fantasma se mueve lateralmente para绕过 el obstáculo
+- [x] Ningún fantasma queda atrapado en la pen
+- [x] Una vez fuera de la puerta (y < 12), el fantasma usa `decideGhost()` normalmente
+- [x] Al perder una vida, los fantasmas regresan a la pen con `exitingPen: true`
+- [x] El BFS cubre todas las celdas transitables de la pen (rows 13-15, cols 12-15)
+- [x] El juego no tiene errores en consola
 
 ---
 
