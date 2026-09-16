@@ -254,6 +254,7 @@ function resetPositions( game ) {
     g.x = GHOST_STARTS[ i ].x;
     g.y = GHOST_STARTS[ i ].y;
     g.dir = 'up';
+    g.exitingPen = true;
   } );
   game.ghostExitTimer = 0;
   game.ghostsReleased = 1;
