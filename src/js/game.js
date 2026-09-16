@@ -199,6 +199,7 @@ function moveGhost( game, g, index ) {
   const d = DIRS[ g.dir ];
   g.x += d.x * g.speed;
   g.y += d.y * g.speed;
+  if ( g.exitingPen && g.y <= 11 ) g.exitingPen = false;
   wrapTunnel( g, width );
 }
 
