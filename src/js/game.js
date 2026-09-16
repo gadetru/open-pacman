@@ -143,7 +143,9 @@ function decideGhost( game, g ) {
   }
 }
 
-function moveGhost( game, g ) {
+function moveGhost( game, g, index ) {
+  if ( index >= game.ghostsReleased ) return;
+
   const grid = game.grid;
   const width = grid[ 0 ].length;
 
@@ -179,7 +181,14 @@ function collides( a, b ) {
 
 function update( game ) {
   movePacman( game );
-  game.ghosts.forEach( ( g ) => moveGhost( game, g ) );
+
+  game.ghostExitTimer++;
+  if ( game.ghostsReleased < game.ghosts.length && game.ghostExitTimer >= 90 ) {
+    game.ghostExitTimer = 0;
+    game.ghostsReleased++;
+  }
+
+  game.ghosts.forEach( ( g, i ) => moveGhost( game, g, i ) );
 
   for ( const g of game.ghosts ) {
     if ( collides( game.pacman, g ) ) {
