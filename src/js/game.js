@@ -43,6 +43,8 @@ function createGame() {
       speed: GHOST_SPEED,
       kind: g.kind,
     } ) ),
+    ghostExitTimer: 0,
+    ghostsReleased: 1,
   };
 }
 
