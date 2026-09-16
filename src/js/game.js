@@ -42,6 +42,7 @@ function createGame() {
       dir: 'up',
       speed: GHOST_SPEED,
       kind: g.kind,
+      exitingPen: true,
     } ) ),
     ghostExitTimer: 0,
     ghostsReleased: 1,
