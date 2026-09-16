@@ -238,6 +238,10 @@ function moveGhost( game, g, index ) {
   g.x += d.x * g.speed;
   g.y += d.y * g.speed;
   wrapTunnel( g, width );
+
+  if ( g.exitingPen && Math.round( g.y ) < 12 ) {
+    g.exitingPen = false;
+  }
 }
 
 function resetPositions( game ) {
