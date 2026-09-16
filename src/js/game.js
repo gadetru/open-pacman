@@ -193,6 +193,9 @@ function resetPositions( game ) {
     g.y = GHOST_STARTS[ i ].y;
     g.dir = 'up';
   } );
+  game.ghostExitTimer = 0;
+  game.ghostsReleased = 1;
+  game.pacmanHistory = [];
 }
 
 function collides( a, b ) {
