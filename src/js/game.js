@@ -47,7 +47,6 @@ function createGame() {
     ghostExitTimer: 0,
     ghostsReleased: 1,
     pacmanHistory: [],
-    penDist: penDistanceBFS( grid ),
   };
 }
 
@@ -78,63 +77,11 @@ function canMove( grid, x, y, dir, actor ) {
   return !isWall( grid, tx, ty, actor );
 }
 
-// BFS desde la puerta de la pen. Retorna un Map con clave "x,y" y valor distancia.
-// Puerta: celdas (13,12) y (14,12). Solo celdas transitables por fantasmas.
-function penDistanceBFS( grid ) {
-  const dist = new Map();
-  const queue = [ { x: 13, y: 12, d: 0 }, { x: 14, y: 12, d: 0 } ];
-  dist.set( '13,12', 0 );
-  dist.set( '14,12', 0 );
-
-  while ( queue.length > 0 ) {
-    const { x, y, d } = queue.shift();
-    for ( const dir of Object.values( DIRS ) ) {
-      const nx = x + dir.x;
-      const ny = y + dir.y;
-      const key = nx + ',' + ny;
-      if ( dist.has( key ) ) continue;
-      if ( ny < 0 || ny >= grid.length ) continue;
-      if ( nx < 0 || nx >= grid[ 0 ].length ) continue;
-      const v = grid[ ny ][ nx ];
-      if ( v === 1 ) continue; // pared
-      dist.set( key, d + 1 );
-      queue.push( { x: nx, y: ny, d: d + 1 } );
-    }
-  }
-  return dist;
-}
-
 function wrapTunnel( a, width ) {
   if ( Math.round( a.y ) === TUNNEL_ROW ) {
     if ( a.x < 0 ) a.x += width;
     else if ( a.x >= width ) a.x -= width;
   }
-}
-
-// Mover fantasma hacia la puerta usando distancias BFS precalculadas.
-function moveGhostToDoor( game, g ) {
-  const grid = game.grid;
-  const penDist = game.penDist;
-
-  const options = Object.keys( DIRS ).filter(
-    ( dir ) => dir !== OPPOSITE[ g.dir ] && canMove( grid, g.x, g.y, dir, 'ghost' )
-  );
-  const choices = options.length ? options : [ OPPOSITE[ g.dir ] ];
-
-  let best = choices[ 0 ];
-  let bestDist = Infinity;
-  for ( const dir of choices ) {
-    const d = DIRS[ dir ];
-    const nx = Math.round( g.x ) + d.x;
-    const ny = Math.round( g.y ) + d.y;
-    const key = nx + ',' + ny;
-    const dist = penDist.has( key ) ? penDist.get( key ) : Infinity;
-    if ( dist < bestDist ) {
-      bestDist = dist;
-      best = dir;
-    }
-  }
-  g.dir = best;
 }
 
 function movePacman( game ) {
@@ -255,10 +202,6 @@ function moveGhost( game, g, index ) {
   g.y += d.y * g.speed;
   if ( g.exitingPen && g.y <= 11 ) g.exitingPen = false;
   wrapTunnel( g, width );
-
-  if ( g.exitingPen && Math.round( g.y ) < 12 ) {
-    g.exitingPen = false;
-  }
 }
 
 function resetPositions( game ) {
