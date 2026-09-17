@@ -12,6 +12,7 @@ const OPPOSITE = { left: 'right', right: 'left', up: 'down', down: 'up' };
 
 const PACMAN_SPEED = 0.125; // 1/8 celda/frame -> alinea cada 8 frames
 const GHOST_SPEED = 0.1;    // 1/10 celda/frame
+const FRIGHT_DURATION = 360; // ~6 s a 60fps
 
 // Crea una partida nueva. Copia MAZE (pristino) a game.grid para poder comer
 // dots sin destruir el original, y reiniciar.
@@ -21,7 +22,7 @@ function createGame() {
   grid[ PACMAN_START.y ][ PACMAN_START.x ] = 0;
 
   let dots = 0;
-  for ( const row of grid ) for ( const v of row ) if ( v === 2 ) dots++;
+  for ( const row of grid ) for ( const v of row ) if ( v === 2 || v === 4 ) dots++;
 
   return {
     state: 'start',
@@ -43,11 +44,17 @@ function createGame() {
       speed: GHOST_SPEED,
       kind: g.kind,
       exitingPen: true,
+      scared: false,
     } ) ),
     ghostExitTimer: 0,
     ghostsReleased: 1,
     pacmanHistory: [],
     penDist: penDistanceBFS( grid ),
+    frightened: {
+      active: false,
+      timer: 0,
+      chain: 0,
+    },
   };
 }
 
@@ -137,6 +144,20 @@ function moveGhostToDoor( game, g ) {
   g.dir = best;
 }
 
+// Activar modo asustado: fantasmas liberados fuera de la pen se vuelven azules
+// y revierten su dirección.
+function triggerFrightened( game ) {
+  game.frightened.active = true;
+  game.frightened.timer = FRIGHT_DURATION;
+  game.frightened.chain = 0;
+  game.ghosts.forEach( ( ghost, index ) => {
+    if ( index < game.ghostsReleased && !ghost.exitingPen ) {
+      ghost.scared = true;
+      ghost.dir = OPPOSITE[ ghost.dir ];
+    }
+  } );
+}
+
 function movePacman( game ) {
   const p = game.pacman;
   const grid = game.grid;
@@ -156,6 +177,13 @@ function movePacman( game ) {
       grid[ p.y ][ p.x ] = 0;
       game.score += 10;
       game.dotsRemaining--;
+    }
+    // Comer power pellet.
+    else if ( grid[ p.y ][ p.x ] === 4 ) {
+      grid[ p.y ][ p.x ] = 0;
+      game.score += 50;
+      game.dotsRemaining--;
+      triggerFrightened( game );
     }
     // Si no puede seguir, se detiene en la celda.
     if ( !canMove( grid, p.x, p.y, p.dir, 'pacman' ) ) return;
@@ -255,10 +283,14 @@ function resetPositions( game ) {
     g.y = GHOST_STARTS[ i ].y;
     g.dir = 'up';
     g.exitingPen = true;
+    g.scared = false;
   } );
   game.ghostExitTimer = 0;
   game.ghostsReleased = 1;
   game.pacmanHistory = [];
+  game.frightened.active = false;
+  game.frightened.timer = 0;
+  game.frightened.chain = 0;
 }
 
 function collides( a, b ) {
@@ -278,6 +310,15 @@ function update( game ) {
   }
 
   game.ghosts.forEach( ( g, i ) => moveGhost( game, g, i ) );
+
+  // Decrementar temporizador de modo asustado.
+  if ( game.frightened.active ) {
+    game.frightened.timer--;
+    if ( game.frightened.timer <= 0 ) {
+      game.frightened.active = false;
+      game.ghosts.forEach( ( ghost ) => ( ghost.scared = false ) );
+    }
+  }
 
   for ( const g of game.ghosts ) {
     if ( collides( game.pacman, g ) ) {
