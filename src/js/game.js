@@ -256,6 +256,13 @@ function moveGhost( game, g, index ) {
     g.y = Math.round( g.y );
     if ( g.exitingPen ) {
       moveGhostToDoor( game, g );
+    } else if ( g.scared ) {
+      // Fantasmas asustados eligen dirección al azar en cada intersección.
+      const safeOptions = Object.keys( DIRS ).filter(
+        ( dir ) => dir !== OPPOSITE[ g.dir ] && canMove( grid, g.x, g.y, dir, 'ghost' )
+      );
+      const safeChoices = safeOptions.length ? safeOptions : [ OPPOSITE[ g.dir ] ];
+      g.dir = safeChoices[ Math.floor( Math.random() * safeChoices.length ) ];
     } else {
       decideGhost( game, g );
     }
@@ -320,17 +327,28 @@ function update( game ) {
     }
   }
 
-  for ( const g of game.ghosts ) {
-    if ( collides( game.pacman, g ) ) {
-      game.lives--;
-      if ( game.lives <= 0 ) {
-        game.state = 'lost';
-        return;
+  game.ghosts.forEach( ( ghost, ghostIndex ) => {
+    if ( collides( game.pacman, ghost ) ) {
+      if ( ghost.scared ) {
+        // Comer fantasma asustado: puntos escalados 200/400/800/1600.
+        game.score += 200 * Math.pow( 2, game.frightened.chain );
+        game.frightened.chain++;
+        // Respawn en la pen.
+        ghost.x = GHOST_STARTS[ ghostIndex ].x;
+        ghost.y = GHOST_STARTS[ ghostIndex ].y;
+        ghost.dir = 'up';
+        ghost.exitingPen = true;
+        ghost.scared = false;
+      } else {
+        game.lives--;
+        if ( game.lives <= 0 ) {
+          game.state = 'lost';
+          return;
+        }
+        resetPositions( game );
       }
-      resetPositions( game );
-      break;
     }
-  }
+  } );
 
   if ( game.dotsRemaining <= 0 ) game.state = 'won';
 }
