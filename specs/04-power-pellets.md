@@ -11,7 +11,7 @@
 
 **In:**
 
-- 4 power pellets en las celdas (1,3), (26,3), (1,23), (26,23), representados como nuevo valor de celda `4` en el grid
+- 4 power pellets en las celdas (1,1), (26,1), (1,29), (26,29), representados como nuevo valor de celda `4` en el grid
 - Comer el pellet suma 50 puntos y cuenta para la condición de victoria (`dotsRemaining`)
 - Modo asustado: los fantasmas liberados se vuelven azules 360 frames, revierten la dirección y se mueven al azar
 - Durante el modo asustado, chocar con un fantasma lo come: 200/400/800/1600 puntos según cadena del mismo pellet
@@ -48,10 +48,8 @@ scared: false,
 
 Celdas cambiadas en `MAZE_STR` de `maze.js` (de `'.'` a `'o'`):
 
-- (1,3) → `#o####...` (reemplaza el dot)
-- (26,3) → `...o#` (reemplaza el dot)
-- (1,23) → `#o..##...` (reemplaza el dot)
-- (26,23) → `##..o#` (reemplaza el dot)
+- (1,1) y (26,1) → fila 1 `#o...........##...........o#`
+- (1,29) y (26,29) → fila 29 `#o..........................o#`
 
 Las 4 celdas son dots hoy, así que cada power pellet reemplaza un dot de 10 puntos.
 
@@ -90,7 +88,7 @@ Todo el código nuevo de este spec debe ser legible para un dev junior:
 ## Acceptance criteria
 
 - [ ] El juego carga sin errores en consola
-- [ ] Se ven 4 power pellets grandes en (1,3), (26,3), (1,23), (26,23) y ya no hay dots en esas celdas
+- [ ] Se ven 4 power pellets grandes en (1,1), (26,1), (1,29), (26,29) y ya no hay dots en esas celdas
 - [ ] Comer un power pellet suma 50 puntos (sin sumar también los 10 del dot)
 - [ ] Al comerlo, los fantasmas ya liberados y fuera de la pen se vuelven azules y revierten su dirección
 - [ ] Los fantasmas aún en la pen o sin liberar no se vuelven azules
@@ -119,6 +117,7 @@ Todo el código nuevo de este spec debe ser legible para un dev junior:
 - **Sí:** perder vida cancela el modo asustado. Fiel al clásico y evita estados raros en el reset.
 - **Sí:** azul `#0000ff` para asustados. Distintivo de las paredes (`#2121ff`).
 - **Sí:** código nuevo con nombres legibles y descriptivos (sin abreviaturas tipo `g`, `p`).
+- **Sí:** esquinas de pantalla (1,1)(26,1)(1,29)(26,29). El usuario cambió la posición tras aprobar: se priorizan las esquinas físicas sobre la disposición clásica del juego.
 
 ---
 
